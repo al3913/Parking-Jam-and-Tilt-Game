@@ -35,6 +35,7 @@ public class Water {
             WaterConfiguration start = new WaterConfiguration(Integer.parseInt(args[0]), config, curr); //Creates starting config
             System.out.println("Amount: " + args[0] + ", Buckets: " + s + "]");
             ArrayList<Configuration> path = (ArrayList<Configuration>) Solver.BFS(start); //Solves for solution, returns the shortest path
+            Solver.printConfigs();
             if(path==null) System.out.println("No solution"); //If no path found, print no solution
             else {
                 for (int i = 0; i < path.size(); i++) {

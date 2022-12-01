@@ -1,8 +1,11 @@
 package puzzles.tilt.gui;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import puzzles.common.Observer;
+import puzzles.tilt.model.TiltConfig;
 import puzzles.tilt.model.TiltModel;
 
 import javafx.application.Application;
@@ -14,19 +17,32 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
     /** The resources directory is located directly underneath the gui package */
     private final static String RESOURCES_DIR = "resources/";
 
+    private TiltModel model;
+
     // for demonstration purposes
-    private Image greenDisk = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"green.png"));
+    private final Image greenDisk = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"green.png"));
+    private final Image block = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"block.png"));
+    private final Image hole = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"hole.png"));
+    private final Image blueDisk = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"blue.png"));
 
     public void init() {
         String filename = getParameters().getRaw().get(0);
+        this.model = new TiltModel(filename);
+        model.addObserver(this);
+        System.out.println("init:   Initialize and connect to model!");
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        Button button = new Button();
-        button.setGraphic(new ImageView(greenDisk));
-        Scene scene = new Scene(button);
-        stage.setScene(scene);
+        BorderPane main = new BorderPane();
+
+        Label l = new Label("Loaded: " + model.getFileName());
+        main.setTop(l);
+
+
+
+        stage.setScene(new Scene(main));
+        stage.setTitle("Tilt");
         stage.show();
     }
 

@@ -25,6 +25,7 @@ public class Strings {
             StringsConfiguration start = new StringsConfiguration(args[0], args[1]); //Creates the starting config
             System.out.println("Start: " + args[0] + ", End: " + args[1]); //Prints the starting string and goal string
             ArrayList<Configuration> path = (ArrayList<Configuration>) Solver.BFS(start); //Solves the puzzle sending it to the Solver class and returns the shortest path
+            Solver.printConfigs();
             if(path==null) System.out.println("No solution"); //Print no solution if no path was found
             else {
                 for (int i = 0; i < path.size(); i++) {
