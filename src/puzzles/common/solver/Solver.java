@@ -21,8 +21,12 @@ public class Solver {
      * @param start starting configuration
      * @return returns a collection of configurations that represent the shortest path taken to the goal
      */
+
+    private static int total; //Global variables to avoid printing during BFS method
+    private static int unique;
+
     public static Collection<Configuration> BFS(Configuration start) {
-        int total = 1, unique = 1; //total config and unique config counts start at 1
+        total = 1; unique = 1; //total config and unique config counts start at 1
         Configuration end = null; //Ending configuration starts at null
         LinkedList<Configuration> queue = new LinkedList<>(); //Queue of configurations
         queue.add(start); //Adds the starting config to the queue
@@ -43,8 +47,6 @@ public class Solver {
                 }
             }
         }
-        System.out.println("Total configs: " + total); //Print total configs
-        System.out.println("Unique configs: " + unique); //Print unique configs
         return makePath(start, end, predecessors); //Returns the path taken
     }
 
@@ -60,5 +62,10 @@ public class Solver {
             path.add(0, start); //Add the starting config to path
         }
         return path; //Return path
+    }
+
+    public static void printConfigs() { //Prints configs
+        System.out.println("Total configs: " + total); //Print total configs
+        System.out.println("Unique configs: " + unique); //Print unique configs
     }
 }
