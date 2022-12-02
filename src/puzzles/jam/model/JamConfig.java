@@ -11,10 +11,12 @@ import java.util.*;
 
 public class JamConfig implements Configuration {
 
-    public int height; //max rows
-    public int width; //max cols
-    public int numCars;
+    private static int height; //max rows
+    private static int width; //max cols
+    private int numCars;
     private ArrayList<Car> cars = new ArrayList<Car>();
+
+    private char[][] grid;
 
     public JamConfig(String file) throws IOException {
         try(BufferedReader read = new BufferedReader(new FileReader(file)))
@@ -22,26 +24,82 @@ public class JamConfig implements Configuration {
             String[] field = read.readLine().split("\\s+");
             height = Integer.parseInt(field[0]);
             width = Integer.parseInt(field[1]);
-            String line = read.readLine();
+            grid = new char[height][width];
+            for (char[] r: grid)
+            {
+                Arrays.fill(r,'.');
+            }
             numCars = Integer.parseInt(read.readLine());
+            String line;
             while((line = read.readLine()) != null)
             {
                 String[] data = line.split("\\s+");
-                Car current = new Car(Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), data[0]);
+                int startR = Integer.parseInt(data[1]);
+                int startC = Integer.parseInt(data[2]);
+                int endR = Integer.parseInt(data[3]);
+                int endC = Integer.parseInt(data[4]);
+                Car current = new Car(startR, startC, endR, endC, data[0]);
                 cars.add(current);
+                for (int r = startR; r <= endR; r++)
+                {
+                    for (int c = startC; c <= endC; c++)
+                    {
+                        grid[r][c] = data[0].charAt(0);
+                    }
+                }
             }
         }
     }
 
-    private JamConfig(int startR, int endR, int startC, int endC, String letter, int index)
+    private JamConfig(int startR, int endR, int startC, int endC, JamConfig other, int index, String move)
     {
-        Car newC = new Car(startR,startC,endR,endC, letter);
-        cars.remove(index);
+        Car newC = new Car(startR,startC,endR,endC, other.cars.get(index).getLetter());
+        this.cars.addAll(other.cars);
+        if(cars.size()>0) cars.remove(index);
         cars.add(index,newC);
+
+        this.grid = new char[height][width];
+        for(int r=0;r<height;r++) {
+            if (width >= 0) System.arraycopy(other.grid[r], 0, this.grid[r], 0, width);
+        }
+        if (move.equals("R"))
+        {
+            grid[endR][endC] = grid[startR][startC];
+            grid[startR][startC-1] = '.';
+        }
+        if (move.equals("L"))
+        {
+            grid[startR][startC] = grid[endR][endC];
+            grid[endR][endC+1] = '.';
+        }
+        if (move.equals("U"))
+        {
+            grid[endR][endC] = grid[startR][startC];
+            grid[startR-1][startC] = '.';
+        }
+        if (move.equals("L"))
+        {
+            grid[startR][startC] = grid[endR][endC];
+            grid[endR+1][endC] = '.';
+        }
+
+
+    }
+
+    public void move(String dir) {
+        if(dir.equals("R")) {
+
+        }
     }
 
     @Override
     public boolean isSolution() {
+
+        for(int r = 0; r < height;r++)
+        {
+            if (grid[r][width-1] == 'X')
+                return true;
+        }
         return false;
     }
 
@@ -50,6 +108,7 @@ public class JamConfig implements Configuration {
         Collection<Configuration> neighbors = new ArrayList<>();
         for(int i = 0; i < cars.size(); i++)
         {
+            System.out.println("Car " + cars.get(i).getLetter());
             Car car = cars.get(i);
             String direct = car.getDirection();
             int startR = car.getStartRow();
@@ -58,44 +117,55 @@ public class JamConfig implements Configuration {
             int endC = car.getEndCol();
             if(direct.equals("H"))
             {
-                if(!(endC + 1 > width) && collision(endC + 1, endR, direct))
+                if((!(endC + 1 >= width)) && (collision(endC + 1, endR, direct)))
                 {
-                    neighbors.add(new JamConfig(startR,endR,startC+1,endC+1, car.getLetter(), i));
+                    System.out.println("Add neighbor");
+                    JamConfig j1 = new JamConfig(startR,endR,startC+1,endC+1, this, i, "R");
+                    neighbors.add(j1);
+                    System.out.println(j1);
                 }
-                if(!(startC - 1 < 0) && collision(startC - 1, startR, direct))
+                if(!(startC - 1 <= 0) && collision(startC - 1, startR, direct))
                 {
-                    neighbors.add(new JamConfig(startR,endR,startC-1,endC-1, car.getLetter(), i));
+                    System.out.println("Add neighbor");
+                    JamConfig j2 = new JamConfig(startR,endR,startC-1,endC-1, this, i, "L");
+                    neighbors.add(j2);
+                    System.out.println(j2);
 
                 }
             }
             else {
-                if(!(endR + 1 > height) && collision(endC, endR + 1, direct))
-                    neighbors.add(new JamConfig(startR+1,endR+1,startC,endC, car.getLetter(), i));
-
-                if(!(startR - 1 < 0) && collision(startC, startR - 1, direct))
-                    neighbors.add(new JamConfig(startR-1,endR-1,startC,endC, car.getLetter(), i));
+                if (!(endR + 1 >= height) && collision(endC, endR + 1, direct)) {
+                    System.out.println("Add neighbor");
+                    neighbors.add(new JamConfig(startR + 1, endR + 1, startC, endC, this, i, "U"));
+                }
+                if(!(startR - 1 <= 0) && collision(startC, startR - 1, direct)) {
+                    System.out.println("Add neighbor");
+                    neighbors.add(new JamConfig(startR - 1, endR - 1, startC, endC, this, i, "D"));
+                }
             }
         }
+        System.out.println("done");
         return neighbors;
     }
 
     @Override
     public boolean equals(Object other) {
-        return false;
+        boolean result = true;
+        if (other instanceof JamConfig j) {
+            for(int r = 0; r < height; r++)
+                for(int c = 0; c < width; c++)
+                    if(grid[r][c] != j.grid[r][c])
+                    {
+                        result = false;
+                        break;
+                    }
+        }
+        return result;
     }
 
     public boolean collision(int x, int y, String orient)
     {
-        for(Car c: cars)
-        {
-            if (orient.equals("H"))
-                if ((x >= c.getStartCol()) && (x <= c.getEndCol()) && (y >= c.getStartRow()) && (y <= c.getEndRow()))
-                    return false;
-            if (orient.equals("V"))
-                if ((y >= c.getStartRow()) && (y <= c.getEndRow()) && (x >= c.getStartCol()) && (x <= c.getEndCol()))
-                    return false;
-        }
-        return true;
+        return grid[x][y] == '.';
     }
 
     @Override
@@ -105,6 +175,15 @@ public class JamConfig implements Configuration {
 
     @Override
     public String toString() {
-        return null;
+        String s = "";
+        for(int r = 0; r < height; r++)
+        {
+            for(int c = 0; c < width; c++)
+            {
+                s += grid[r][c] + " ";
+            }
+            s += "\n";
+        }
+        return s;
     }
 }

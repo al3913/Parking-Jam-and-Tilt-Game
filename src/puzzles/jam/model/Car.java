@@ -15,6 +15,7 @@ public class Car {
         this.endR = endR;
         this.endC = endC;
         this.letter = letter;
+        setDirection();
     }
 
     public void setDirection()
