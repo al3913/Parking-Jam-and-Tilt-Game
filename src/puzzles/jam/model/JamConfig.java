@@ -77,7 +77,7 @@ public class JamConfig implements Configuration {
             grid[endR][endC] = grid[startR][startC];
             grid[startR-1][startC] = '.';
         }
-        if (move.equals("L"))
+        if (move.equals("D"))
         {
             grid[startR][startC] = grid[endR][endC];
             grid[endR+1][endC] = '.';
@@ -86,11 +86,6 @@ public class JamConfig implements Configuration {
 
     }
 
-    public void move(String dir) {
-        if(dir.equals("R")) {
-
-        }
-    }
 
     @Override
     public boolean isSolution() {
@@ -108,7 +103,6 @@ public class JamConfig implements Configuration {
         Collection<Configuration> neighbors = new ArrayList<>();
         for(int i = 0; i < cars.size(); i++)
         {
-            System.out.println("Car " + cars.get(i).getLetter());
             Car car = cars.get(i);
             String direct = car.getDirection();
             int startR = car.getStartRow();
@@ -117,34 +111,26 @@ public class JamConfig implements Configuration {
             int endC = car.getEndCol();
             if(direct.equals("H"))
             {
-                if((!(endC + 1 >= width)) && (collision(endC + 1, endR, direct)))
+                if((!(endC + 1 >= width)) && (collision(endC + 1, endR)))
                 {
-                    System.out.println("Add neighbor");
                     JamConfig j1 = new JamConfig(startR,endR,startC+1,endC+1, this, i, "R");
                     neighbors.add(j1);
-                    System.out.println(j1);
                 }
-                if(!(startC - 1 <= 0) && collision(startC - 1, startR, direct))
+                if(!(startC - 1 < 0) && collision(startC - 1, startR))
                 {
-                    System.out.println("Add neighbor");
                     JamConfig j2 = new JamConfig(startR,endR,startC-1,endC-1, this, i, "L");
                     neighbors.add(j2);
-                    System.out.println(j2);
-
                 }
             }
             else {
-                if (!(endR + 1 >= height) && collision(endC, endR + 1, direct)) {
-                    System.out.println("Add neighbor");
+                if (!(endR + 1 >= height) && collision(endC, endR + 1)) {
                     neighbors.add(new JamConfig(startR + 1, endR + 1, startC, endC, this, i, "U"));
                 }
-                if(!(startR - 1 <= 0) && collision(startC, startR - 1, direct)) {
-                    System.out.println("Add neighbor");
+                if(!(startR - 1 < 0) && collision(startC, startR - 1)) {
                     neighbors.add(new JamConfig(startR - 1, endR - 1, startC, endC, this, i, "D"));
                 }
             }
         }
-        System.out.println("done");
         return neighbors;
     }
 
@@ -163,14 +149,14 @@ public class JamConfig implements Configuration {
         return result;
     }
 
-    public boolean collision(int x, int y, String orient)
+    public boolean collision(int x, int y)
     {
-        return grid[x][y] == '.';
+        return grid[y][x]=='.';
     }
 
     @Override
     public int hashCode() {
-        return cars.hashCode();
+        return (this.toString()).hashCode();
     }
 
     @Override
@@ -182,6 +168,7 @@ public class JamConfig implements Configuration {
             {
                 s += grid[r][c] + " ";
             }
+            if(r != height-1)
             s += "\n";
         }
         return s;
