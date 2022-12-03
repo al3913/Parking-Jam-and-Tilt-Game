@@ -22,7 +22,7 @@ public class Jam {
             if(path==null) System.out.println("No solution"); //Print no solution if no path was found
             else {
                 for (int i = 0; i < path.size(); i++) {
-                    System.out.println("Step " + i + ":\n" + path.get(i)); //Prints out the path
+                    System.out.println("Step " + i + ":\n" + path.get(i) + "\n"); //Prints out the path
                 }
             }
         }
