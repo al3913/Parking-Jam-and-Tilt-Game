@@ -135,7 +135,7 @@ public class TiltPTUI implements Observer<TiltModel, String> {
         }
         else {
             TiltPTUI ui = new TiltPTUI(args[0]);
-            ui.run();
+            ui.run(); //Runs the PTUI
         }
     }
 }

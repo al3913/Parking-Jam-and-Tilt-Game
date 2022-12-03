@@ -38,7 +38,7 @@ public class Tilt {
                     }
                 }
             }
-            TiltConfig t = new TiltConfig(DIM, board); //uses that data to create a config
+            TiltConfig t = new TiltConfig(DIM, board); //Uses that data to create a config
             System.out.println(t);
             ArrayList<Configuration> path = (ArrayList<Configuration>) Solver.BFS(t); //Solves the puzzle sending it to the Solver class and returns the shortest path
             Solver.printConfigs(); //Prints out number of total and unique configs

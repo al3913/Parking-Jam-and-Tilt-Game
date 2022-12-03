@@ -76,6 +76,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
         v.setMaxHeight(200);
         v.setMinWidth(90);
         v.setSpacing(50);
+        v.setAlignment(Pos.CENTER);
         Button load = new Button("Load");
         load.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         load.setMinWidth(75);

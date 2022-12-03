@@ -13,7 +13,6 @@ import java.util.*;
 public class TiltConfig implements Configuration {
 
     /** Text Representations of pieces on board **/
-    private final static char BLOCK = '*';
     private final static char EMPTY = '.';
     private final static char HOLE = 'O';
     private final static char BLUE = 'B';

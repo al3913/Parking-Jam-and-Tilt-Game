@@ -82,8 +82,8 @@ public class TiltModel {
                     }
                 }
             }
-            initialLoad = new TiltConfig(DIM, board); //sets initial load to the generated board
-            currentConfig = new TiltConfig(DIM, board); //sets current config to the generated board
+            initialLoad = new TiltConfig(DIM, board); //Sets initial load to the generated board
+            currentConfig = new TiltConfig(DIM, board); //Sets current config to the generated board
             alertObservers("Loaded"); //Announce to the interface that a game was loaded
         }
         catch (FileNotFoundException f) {
