@@ -51,7 +51,7 @@ public class JamConfig implements Configuration {
         }
     }
 
-    private JamConfig(int startR, int endR, int startC, int endC, JamConfig other, int index, String move)
+    public JamConfig(int startR, int endR, int startC, int endC, JamConfig other, int index, String move)
     {
         Car newC = new Car(startR,startC,endR,endC, other.cars.get(index).getLetter());
         this.cars.addAll(other.cars);
@@ -98,6 +98,14 @@ public class JamConfig implements Configuration {
         return false;
     }
 
+    public int getWidth()
+    {
+        return width;
+    }
+    public int getHeight()
+    {
+        return height;
+    }
     @Override
     public Collection<Configuration> getNeighbors() {
         Collection<Configuration> neighbors = new ArrayList<>();
@@ -159,6 +167,16 @@ public class JamConfig implements Configuration {
         return (this.toString()).hashCode();
     }
 
+    public char[][] getGrid()
+    {
+        return grid;
+    }
+
+    public ArrayList<Car> getCars()
+    {
+        return cars;
+    }
+
     @Override
     public String toString() {
         String s = "";
@@ -172,5 +190,17 @@ public class JamConfig implements Configuration {
             s += "\n";
         }
         return s;
+    }
+
+    public Car getCar(String letter)
+    {
+        for(int i = 0; i < numCars; i++)
+        {
+            if (cars.get(i).getLetter().equals(letter))
+            {
+                return cars.get(i);
+            }
+        }
+        return null;
     }
 }

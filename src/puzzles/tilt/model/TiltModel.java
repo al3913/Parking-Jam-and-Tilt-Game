@@ -51,7 +51,6 @@ public class TiltModel {
     }
 
     public void loadFromFile(String fileName) {
-        loadedGame = fileName;
         loadFromFile(new File(fileName));
     }
 
@@ -90,13 +89,14 @@ public class TiltModel {
 
     public void move(char dir) {
         if(currentConfig.isSolution()) { alertObservers("Won"); return; }
-        TiltConfig n = new TiltConfig();
-        switch (dir) {
-            case 'n': n = currentConfig.tiltNorth(); break;
-            case 'e': n = currentConfig.tiltEast(); break;
-            case 's': n = currentConfig.tiltSouth(); break;
-            case 'w': n = currentConfig.tiltWest();
-        }
+        new TiltConfig();
+        TiltConfig n = switch (dir) {
+            case 'n' -> currentConfig.tiltNorth();
+            case 'e' -> currentConfig.tiltEast();
+            case 's' -> currentConfig.tiltSouth();
+            case 'w' -> currentConfig.tiltWest();
+            default -> new TiltConfig();
+        };
         if(n!=null) { currentConfig=n; alertObservers("Moved"); }
         else alertObservers("Invalid");
     }
