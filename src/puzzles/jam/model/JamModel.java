@@ -89,8 +89,6 @@ public class JamModel {
     {
         if(currentConfig.isSolution()) { alertObservers("Won"); return; }
         Car car = currentConfig.getCar(currentCar);
-        for (int i = 0; i < currentConfig.getCars().size(); i++)
-            System.out.println(currentConfig.getCars().get(i).getLetter());
         int i = currentConfig.getCars().indexOf(car);
         int startR = car.getStartRow();
         int endR = car.getEndRow();
@@ -123,8 +121,8 @@ public class JamModel {
                 }
                 else if (moveH == 0 && moveV != 0)
                 {
-                    if (moveV > 0 && (!(Integer.parseInt(commands[1]) >= currentConfig.getHeight()))) move("D");
-                    else if ((!(Integer.parseInt(commands[1]) < 0))) move("U");
+                    if (moveV > 0 && (!(Integer.parseInt(commands[1]) >= currentConfig.getHeight()))) move("U");
+                    else if ((!(Integer.parseInt(commands[1]) < 0))) move("D");
                 }
             }
             else

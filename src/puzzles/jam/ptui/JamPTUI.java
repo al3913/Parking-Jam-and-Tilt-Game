@@ -38,16 +38,17 @@ public class JamPTUI implements Observer<JamModel, String> {
             case "Loaded" -> System.out.println("> Loaded: " + model.getFilename());
             case "LoadFailed" -> System.out.println("> Failed to load: " + model.getFilename());
             case "NoHint" -> System.out.println("Current Board is unsolvable. Please restart.");
-            case "Hint" -> System.out.println("> Next Step!");
+            case "Hint" -> System.out.println("> Next step!");
             case "Moved" ->
                     System.out.println("> Moved from (" + model.prevSelect[1] + "," + model.prevSelect[2] + ")" + "  to (" + model.commands[1] + "," + model.commands[2] + ")");
-            case "Selected" -> System.out.println("> Selected (" + model.prevSelect[1] + "," + model.prevSelect[2] + ")");
+            case "Select" -> System.out.println("> Selected (" + model.prevSelect[1] + "," + model.prevSelect[2] + ")");
             case "Invalid" ->
                     System.out.println("> Can't moved from (" + model.prevSelect[1] + "," + model.prevSelect[2] + ")" + "  to (" + model.commands[1] + "," + model.commands[2] + ")");
             case "NoCar" -> System.out.println("> No car at (" + model.prevSelect[1] + "," + model.prevSelect[2] + ")");
             case "Reset" -> System.out.println("Puzzle reset!");
         }
         displayBoard();
+        System.out.println("");
     }
 
     public void run()
@@ -65,14 +66,16 @@ public class JamPTUI implements Observer<JamModel, String> {
         while (status) {
             String[] commands = in.nextLine().strip().toLowerCase().split("\\s+");
             if (1 == commands.length) {
-                if (commands[0].equals("q") || commands[0].equals("quit")) {
-                    status = false;
-                    return false;
-                } else if (commands[0].equals("h") || commands[0].equals("hint")) {
-                    model.getHint();
-                } else if (commands[0].equals("r") || commands[0].equals("reset")) {
-                    model.reset();
-                } else System.out.println(COMMANDS);
+                switch (commands[0]) {
+                    case "q", "quit" -> {
+                        status = false;
+                        System.out.print(">");
+                        return false;
+                    }
+                    case "h", "hint" -> model.getHint();
+                    case "r", "reset" -> model.reset();
+                    default -> System.out.println(COMMANDS);
+                }
             } else if (commands.length == 2) {
                 if (commands[0].equals("l") || commands[0].equals("load")) model.loadFile(commands[1]);
                 else System.out.println(COMMANDS);
@@ -86,7 +89,28 @@ public class JamPTUI implements Observer<JamModel, String> {
     }
     public void displayBoard()
     {
-        System.out.println(model.getBoard());
+        int width = model.getBoard().getWidth();
+        int height = model.getBoard().getHeight();
+        System.out.print("  ");
+        for(int col = 0; col < width; col++)
+            System.out.print(col + " ");
+        System.out.print("\n ");
+        for(int border = 0; border < width; border++)
+        {
+            System.out.print("--");
+        }
+        System.out.println();
+        //Each Row
+        for(int row = 0; row < height; row++)
+        {
+            System.out.print(row + "|");
+            char[][] board = model.getBoard().getGrid();
+            for(int col = 0; col < width; col++)
+                System.out.print(board[row][col] + " ");
+            System.out.println();
+        }
+        System.out.println();
+
     }
 
 

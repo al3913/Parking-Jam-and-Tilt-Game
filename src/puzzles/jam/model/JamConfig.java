@@ -194,7 +194,7 @@ public class JamConfig implements Configuration {
 
     public Car getCar(String letter)
     {
-        for(int i = 0; i < numCars; i++)
+        for(int i = 0; i < cars.size(); i++)
         {
             if (cars.get(i).getLetter().equals(letter))
             {
