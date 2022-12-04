@@ -4,17 +4,28 @@ import puzzles.common.solver.Configuration;
 
 import java.util.*;
 
+/**
+ * Main class that represents a games board and main functions
+ *
+ * @author Matt Kingston
+ */
+
 public class TiltConfig implements Configuration {
 
-    private final static char BLOCK = '*';
+    /** Text Representations of pieces on board **/
     private final static char EMPTY = '.';
     private final static char HOLE = 'O';
     private final static char BLUE = 'B';
     private final static char GREEN = 'G';
 
-    private static int DIM;
-    public char[][] board;
+    private static int DIM; //Dimension of the board
+    public char[][] board; //2D array representation of the board
 
+    /**
+     * Constructor for TiltConfig
+     * @param dim dimension of the board
+     * @param b 2D array of the board
+     */
     public TiltConfig(int dim, char[][] b) {
         DIM = dim;
         this.board = new char[dim][dim];
@@ -23,8 +34,12 @@ public class TiltConfig implements Configuration {
         }
     }
 
-    public TiltConfig() {}
+    public TiltConfig() {} //Empty constructor used in the TiltPTUI
 
+    /**
+     * Checks if game is won by checking for any green pieces on the board
+     * @return true if no green pieces found
+     */
     @Override
     public boolean isSolution() {
         for(int r=0;r<DIM;r++) {
@@ -36,6 +51,11 @@ public class TiltConfig implements Configuration {
         return true;
     }
 
+    /**
+     * Performs a move in every direction and adds it to the neighbors array
+     * Removes all the invalid(null) moves
+     * @return a list of valid neighbors
+     */
     @Override
     public Collection<Configuration> getNeighbors() {
         List<Configuration> neighbors = new ArrayList<>();
@@ -47,6 +67,11 @@ public class TiltConfig implements Configuration {
         return neighbors;
     }
 
+    /**
+     * Compares to boards to see if they are equal
+     * @param other the other configuration being compared
+     * @return true if the boards are the same
+     */
     @Override
     public boolean equals(Object other) {
         boolean b = true;
@@ -63,11 +88,19 @@ public class TiltConfig implements Configuration {
         return b;
     }
 
+    /**
+     * Hash code by using java method on the two string
+     * @return hash code of the board
+     */
     @Override
     public int hashCode() {
         return (this.toString()).hashCode();
     }
 
+    /**
+     * String representation of the board
+     * @return string containing all the proper board information
+     */
     @Override
     public String toString() {
         String s = "";
@@ -80,8 +113,12 @@ public class TiltConfig implements Configuration {
         return s;
     }
 
+    /**
+     * Tilts the board north and moves the pieces
+     * @return null if the move is invalid or no pieces moved, otherwise returns the board after the move
+     **/
     public TiltConfig tiltNorth() {
-        TiltConfig north = new TiltConfig(DIM, this.board);
+        TiltConfig north = new TiltConfig(DIM, this.board); //Creates a copy of the current config
         for(int r=1;r<DIM;r++) {
             for(int c=0;c<DIM;c++) {
                 if(north.board[r][c]==GREEN || north.board[r][c]==BLUE) { //When a disc is found
@@ -112,8 +149,13 @@ public class TiltConfig implements Configuration {
         if(this.equals(north)) return null; //If no pieces moved, returns null
         return north; //Return board
     }
+
+    /**
+     * Tilts the board south and moves the pieces
+     * @return null if the move is invalid or no pieces moved, otherwise returns the board after the move
+     **/
     public TiltConfig tiltSouth() {
-        TiltConfig south = new TiltConfig(DIM, this.board);
+        TiltConfig south = new TiltConfig(DIM, this.board); //Creates a copy of the current config
         for(int r=DIM-1;r>=0;r--) {
             for(int c=0;c<DIM;c++) {
                 if(south.board[r][c]==GREEN || south.board[r][c]==BLUE) { //When a disc is found
@@ -144,8 +186,13 @@ public class TiltConfig implements Configuration {
         if(this.equals(south)) return null; //If no pieces moved, returns null
         return south; //Return board
     }
+
+    /**
+     * Tilts the board east and moves the pieces
+     * @return null if the move is invalid or no pieces moved, otherwise returns the board after the move
+     **/
     public TiltConfig tiltEast() {
-        TiltConfig east = new TiltConfig(DIM, this.board);
+        TiltConfig east = new TiltConfig(DIM, this.board);  //Creates a copy of the current config
         for(int r=0;r<DIM;r++) {
             for(int c=DIM-1;c>=0;c--) {
                 if(east.board[r][c]==GREEN || east.board[r][c]==BLUE) { //When a disc is found
@@ -176,8 +223,13 @@ public class TiltConfig implements Configuration {
         if(this.equals(east)) return null; //If no pieces moved, returns null
         return east; //Return board
     }
+
+    /**
+     * Tilts the board west and moves the pieces
+     * @return null if the move is invalid or no pieces moved, otherwise returns the board after the move
+     **/
     public TiltConfig tiltWest() {
-        TiltConfig west = new TiltConfig(DIM, this.board);
+        TiltConfig west = new TiltConfig(DIM, this.board);  //Creates a copy of the current config
         for(int r=0;r<DIM;r++) {
             for(int c=1;c<DIM;c++) {
                 if(west.board[r][c]==GREEN || west.board[r][c]==BLUE) { //When a disc is found
@@ -209,5 +261,5 @@ public class TiltConfig implements Configuration {
         return west; //Return board
     }
 
-    public int getDIM() { return DIM; }
+    public int getDIM() { return DIM; } //Returns the dimension of the board
 }
