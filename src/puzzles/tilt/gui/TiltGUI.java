@@ -36,13 +36,6 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
     private GridPane g; //Grid pane, so it can be updated throughout the game/
     private Label l; //Label, so it can be updated throughout the game
 
-    /** Presets used to represent the types of spaces on a borad **/
-    private final Image greenDisk = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"green.png"), 50, 50, false, false);
-    private final Image block = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"block.png"), 50, 50, false, false);
-    private final Image hole = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"hole.png"), 50, 50, false, false);
-    private final Image blueDisk = new Image(getClass().getResourceAsStream(RESOURCES_DIR+"blue.png"), 50, 50, false, false);
-    private final String empty = "-fx-background-color: white; -fx-border-color: lightgray";
-
     /**
      * Initializes the gui by creating a model and making the gui an observer of it
      */
@@ -66,7 +59,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
 
         l = new Label(); //Creates the label
         l.setMaxWidth(225+model.getDimension()*100);
-        l.setMinHeight(50);
+        l.setMinHeight(30);
         l.setAlignment(Pos.CENTER);
         l.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         l.setText("Loaded: " + model.getFileName()); //Starts by loading the given filename
@@ -98,6 +91,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
 
         stage.setScene(new Scene(main));
         stage.setTitle("Tilt");
+        stage.setResizable(false);
         stage.show(); //Shows the window
     }
 
@@ -131,30 +125,25 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
         w.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         w.setOnAction(event -> model.move('w'));
         b2.setLeft(w);
-        if(model.getDimension()>5) { //If the board is bigger than the default size, change the size of the directionals
-            n.setMinSize(110+model.getDimension()*70,50);
-            e.setMinSize(50, model.getDimension()*70);
-            s.setMinSize(110+model.getDimension()*70,50);
-            w.setMinSize(50, model.getDimension()*70);
-        }
     }
 
     /**
      * Creates the board where the actual game is shown
      */
     public void makeBoard() {
+        int dim = 350/model.getDimension(); //Calculates the size of the button to fit in the window
         for(int c=0;c<model.getDimension();c++) {
             for(int r=0;r<model.getDimension();r++) {
                 Button b = new Button(); //Creates a button for each spot
                 char p = model.getBoard().board[r][c];
-                switch (p) { //If the space isnt empty, display the respective object
-                    case '*' -> b.setGraphic(new ImageView(block));
-                    case 'O' -> b.setGraphic(new ImageView(hole));
-                    case 'B' -> b.setGraphic(new ImageView(blueDisk));
-                    case 'G' -> b.setGraphic(new ImageView(greenDisk));
+                switch (p) { //If the space isn't empty, display the respective image on the button
+                    case '*' -> b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(RESOURCES_DIR+"block.png"), dim-18, dim-18, false, false)));
+                    case 'O' -> b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(RESOURCES_DIR+"hole.png"), dim-18, dim-18, false, false)));
+                    case 'B' -> b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(RESOURCES_DIR+"blue.png"), dim-18, dim-18, false, false)));
+                    case 'G' -> b.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(RESOURCES_DIR+"green.png"), dim-18, dim-18, false, false)));
                 }
-                b.setMinSize(70, 70); //Sets size of button
-                b.setStyle(empty); //Cleans up the button visuals to have the same background and border
+                b.setMinSize(dim, dim); //Sets size of button
+                b.setStyle("-fx-background-color: white; -fx-border-color: lightgray"); //Cleans up the button visuals to have the same background and border
                 g.add(b, c, r); //Adds to respective spot on grid
             }
         }
@@ -168,7 +157,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
         fileChooser.setTitle("Load a Game Board");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")+"/data/tilt")); //Base directory of tilt game files
         File selectedFile = fileChooser.showOpenDialog(null);
-        model.loadFromFile(selectedFile); //Calls model's load file function
+        if(selectedFile != null) model.loadFromFile(selectedFile); //Calls model's load file function
     }
 
     /**
@@ -188,7 +177,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
         switch (msg) {
             case "Loaded" -> { //When a game is loaded
                 l.setText("Loaded: " + model.getFileName());
-                sizeBoard(); //Re do the border pane to ensure the size is correct
+                sizeBoard(); //Redo the border pane to ensure the size is correct
             }
             case "LoadFailed" -> l.setText("Failed to load: " + model.getFileName()); //If load failed, do nothing
             case "NoHint" -> l.setText("Current Board is unsolvable. Please restart."); //If board is unsolvable, tell the user to restart
@@ -209,7 +198,7 @@ public class TiltGUI extends Application implements Observer<TiltModel, String> 
     }
 
     /**
-     * Main program to launch the appliaction and send in the given file to be loaded
+     * Main program to launch the application and send in the given file to be loaded
      * @param args the file given to be loaded by the model
      */
     public static void main(String[] args) {
