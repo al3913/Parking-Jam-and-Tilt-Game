@@ -50,8 +50,8 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         String filename = getParameters().getRaw().get(0);
         this.model = new JamModel(filename);
         model.addObserver(this);
-        rows = model.getBoard().getHeight();
-        cols = model.getBoard().getWidth();
+        rows = model.getBoard().getWidth();
+        cols = model.getBoard().getHeight();
     }
 
     /**
@@ -80,6 +80,7 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
             fileChooser.setTitle("Load a game board.");
             //open up a window for the user to interact with.
             File selectedFile = fileChooser.showOpenDialog(stage);
+            model.loadedGame = selectedFile.getName();
             if (selectedFile != null)
             {
                 model.loadFile(String.valueOf(selectedFile));
@@ -114,8 +115,8 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
     public GridPane createBoard()
     {
         GridPane result = new GridPane();
-        for(int r = 0; r < rows; r++)
-            for(int c = 0; c < cols; c++)
+        for(int r = 0; r < model.getBoard().getWidth(); r++)
+            for(int c = 0; c < model.getBoard().getHeight(); c++)
             {
                 Button b = new Button();
                 String letter = String.valueOf(model.getBoard().getGrid()[c][r]);
@@ -167,8 +168,8 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         Label top = new Label();
         switch (msg) {
             case "Won" -> top.setText("Already Won!");
-            case "Loaded" -> top.setText("> Loaded: " + model.getFilename().substring(9));
-            case "LoadFailed" -> top.setText("> Failed to load: " + model.getFilename());
+            case "Loaded" -> top.setText("> Loaded: " + model.getFilename().substring(model.getFilename().indexOf("txt")-6));
+            case "LoadFailed" -> top.setText("> Failed to load: " + model.loadedGame);
             case "NoHint" -> top.setText("Current Board is unsolvable. Please restart.");
             case "Hint" -> top.setText("> Next step!");
             case "Moved" ->

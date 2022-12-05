@@ -47,7 +47,7 @@ public class JamPTUI implements Observer<JamModel, String> {
     public void update(JamModel model, String msg) {
         switch (msg) {
             case "Won" -> System.out.println("Already Won!");
-            case "Loaded" -> System.out.println("> Loaded: " + model.getFilename().substring(9));
+            case "Loaded" -> System.out.println("> Loaded: " + model.getFilename().substring(model.getFilename().indexOf("txt")-6));
             case "LoadFailed" -> System.out.println("> Failed to load: " + model.getFilename());
             case "NoHint" -> System.out.println("Current Board is unsolvable. Please restart.");
             case "Hint" -> System.out.println("> Next step!");

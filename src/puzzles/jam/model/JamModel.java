@@ -24,7 +24,7 @@ public class JamModel {
     /** the current configuration */
     private JamConfig currentConfig;
     private JamConfig initialConfig;
-    private String loadedGame;
+    public String loadedGame;
 
     private boolean selected;
     private String currentCar;
@@ -78,6 +78,7 @@ public class JamModel {
      */
     public void loadFile(String file)
     {
+        System.out.println(loadedGame);
         try
         {
             initialConfig = new JamConfig(file);
@@ -173,9 +174,10 @@ public class JamModel {
                 alertObservers("Select");
                 currentCar = String.valueOf(currentConfig.getGrid()[Integer.parseInt(commands[1])][Integer.parseInt(commands[2])]);
             }
-            else
+            else {
                 prevSelect = commands;
                 alertObservers("NoCar");
+            }
         }
     }
 

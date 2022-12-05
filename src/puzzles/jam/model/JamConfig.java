@@ -187,7 +187,7 @@ public class JamConfig implements Configuration {
                 s += grid[r][c] + " ";
             }
             if(r != height-1)
-            s += "\n";
+                s += "\n";
         }
         return s;
     }
