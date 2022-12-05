@@ -7,11 +7,15 @@ import puzzles.jam.solver.Jam;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * JamPTUI class that creates the PTUI version of the Jam game
+ *
+ * @author Andy Lin
+ */
 public class JamPTUI implements Observer<JamModel, String> {
     private JamModel model;
     private Scanner in;
     private boolean status;
-
 
     private static final String COMMANDS =
             "h(int)              -- hint next move\n" +
@@ -20,6 +24,11 @@ public class JamPTUI implements Observer<JamModel, String> {
             "q(uit)              -- quit the game\n" +
             "r(eset)             -- reset the current game";
 
+    /**
+     * Constructor for the PTUI
+     * @param file to be sent to the model to be loaded
+     * @throws IOException
+     */
     public JamPTUI(String file) throws IOException {
         model = new JamModel(file);
         model.addObserver(this);
@@ -27,13 +36,15 @@ public class JamPTUI implements Observer<JamModel, String> {
         status = true;
     }
 
+    /**
+     * Receives and acts based on what the model performed
+     * @param model the object that wishes to inform this object
+     *                about something that has happened.
+     * @param msg optional data the server.model can send to the observer
+     *
+     */
     @Override
     public void update(JamModel model, String msg) {
-        /*if(model.getBoard().isSolution()) {
-            System.out.println("Already Won!");
-            displayBoard();
-            return;
-        }*/
         switch (msg) {
             case "Won" -> System.out.println("Already Won!");
             case "Loaded" -> System.out.println("> Loaded: " + model.getFilename().substring(9));
@@ -52,6 +63,9 @@ public class JamPTUI implements Observer<JamModel, String> {
         System.out.println("");
     }
 
+    /**
+     * Main run method to run the gui while the game is being played
+     */
     public void run()
     {
         System.out.println("Loaded: " + model.getFilename().substring(9));
@@ -63,6 +77,10 @@ public class JamPTUI implements Observer<JamModel, String> {
         }
     }
 
+    /**
+     * Main game loop that runs while the game is being played
+     * @return true if the game is still going on
+     */
     public boolean gameLoop() {
         while (status) {
             String[] commands = in.nextLine().strip().toLowerCase().split("\\s+");
@@ -88,6 +106,10 @@ public class JamPTUI implements Observer<JamModel, String> {
         }
         return true;
     }
+
+    /**
+     * Display method for printing out the board in the PTUI Form
+     */
     public void displayBoard()
     {
         int width = model.getBoard().getWidth();
@@ -113,7 +135,11 @@ public class JamPTUI implements Observer<JamModel, String> {
 
     }
 
-
+    /**
+     * Main program to launch the application and send in the given file to be loaded
+     * @param args the file to be loaded
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.out.println("Usage: java JamPTUI filename");

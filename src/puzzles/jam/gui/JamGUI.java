@@ -20,6 +20,11 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * JamGUI class that represents the GUI representation of the Jam Game
+ *
+ * @author Andy Lin
+ */
 public class JamGUI extends Application  implements Observer<JamModel, String>  {
     /** The resources directory is located directly underneath the gui package */
     private final static String RESOURCES_DIR = "resources/";
@@ -35,6 +40,12 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
     private BorderPane bp = new BorderPane();
     private GridPane grid;
 
+    /**
+     *
+     * * Initializes the gui by creating a model and making the gui an observer of it
+     *
+     * @throws IOException
+     */
     public void init() throws IOException {
         String filename = getParameters().getRaw().get(0);
         this.model = new JamModel(filename);
@@ -43,6 +54,14 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         cols = model.getBoard().getWidth();
     }
 
+    /**
+     * Creation of all the visual pieces in the GUI
+     * @param stage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         //Top part of BP
@@ -72,14 +91,10 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         });
         bot.getChildren().add(load);
         Button reset = new Button("Reset");
-        reset.setOnAction(event -> {
-            model.reset();
-        });
+        reset.setOnAction(event -> model.reset());
         bot.getChildren().add(reset);
         Button hint = new Button("Hint");
-        hint.setOnAction(event -> {
-            model.getHint();
-        });
+        hint.setOnAction(event -> model.getHint());
         bot.getChildren().add(hint);
         // Assigning
         bp.setTop(top);
@@ -92,6 +107,10 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         stage.show();
     }
 
+    /**
+     * Board creation function
+     * @return GridPane that represents the board
+     */
     public GridPane createBoard()
     {
         GridPane result = new GridPane();
@@ -127,12 +146,22 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         return result;
     }
 
+    /**
+     * Refreshes the display of the board after moves are made
+     */
     public void refresh()
     {
         grid = createBoard();
         bp.setCenter(grid);
     }
 
+    /**
+     * Updates the board based on what the model does and sends to the interface
+     * @param model the object that wishes to inform this object
+     *                about something that has happened.
+     * @param msg optional data the server.model can send to the observer
+     *
+     */
     @Override
     public void update(JamModel model, String msg) {
         Label top = new Label();
@@ -154,6 +183,10 @@ public class JamGUI extends Application  implements Observer<JamModel, String>  
         refresh();
     }
 
+    /**
+     * Main program to launch the appliaction and send in the given file to be loaded
+     * @param args the file given to be loaded by the model
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java JamGUI filename");

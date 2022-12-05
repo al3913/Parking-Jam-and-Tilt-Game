@@ -1,5 +1,11 @@
 package puzzles.jam.model;
 
+/**
+ * Class that represents a Car on the board
+ *
+ *
+ * @author Andy Lin
+ */
 public class Car {
     private int startR;
     private int endR;
@@ -8,6 +14,14 @@ public class Car {
     private String direction;
     private String letter;
 
+    /**
+     * Car constructor
+     * @param startR = far left or far top row location
+     * @param startC = far left or far top col location
+     * @param endR = far right or far bottom row location
+     * @param endC = far right or far bottom col location
+     * @param letter = letter for the car
+     */
     public Car(int startR, int startC, int endR, int endC, String letter)
     {
         this.startR = startR;
@@ -18,6 +32,9 @@ public class Car {
         setDirection();
     }
 
+    /**
+     * Sets the direction for the car
+     */
     public void setDirection()
     {
         if(startR == endR)
@@ -29,36 +46,65 @@ public class Car {
         }
     }
 
+    /**
+     * gets the direction
+     * @return direction
+     */
     public String getDirection()
     {
         return direction;
     }
 
+    /**
+     * gets the letter
+     * @return letter
+     */
     public String getLetter()
     {
         return letter;
     }
 
+    /**
+     * gets the start row
+     * @return startR
+     */
     public int getStartRow()
     {
         return startR;
     }
 
+    /**
+     * gets the start col
+     * @return startC;
+     */
     public int getStartCol()
     {
         return startC;
     }
 
+    /**
+     * gets the end row
+     * @return endR;
+     */
     public int getEndRow()
     {
         return endR;
     }
 
+    /**
+     * gets the end col
+     * @return endC
+     */
     public int getEndCol()
     {
         return endC;
     }
 
+    /**
+     * Gets the color based on the letter of the car
+     * @param carLetter letter representation of the car
+     * @return color hexcode
+     */
     public String getColor(String carLetter) {
         return switch (carLetter) {
             case "A" -> "#6AF369";

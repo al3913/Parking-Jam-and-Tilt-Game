@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ *  Model class for the Model-View-Controller Structure of the PTUI and GUI
+ *
+ * @author Andy Lin
+ */
 public class JamModel {
     /** the collection of observers of this model */
     private final List<Observer<JamModel, String>> observers = new LinkedList<>();
@@ -26,11 +31,19 @@ public class JamModel {
     public String[] prevSelect;
     public String[] commands;
 
+    /**
+     * JamModel constructor
+     * @param file file loaded representing the game
+     * @throws IOException
+     */
     public JamModel(String file) throws IOException {
         loadedGame = file;
         loadFile(file);
     }
 
+    /**
+     * Gets the next move and commences the move
+     */
     public void getHint() {
         if(currentConfig.isSolution()) { alertObservers("Won"); return; }
         ArrayList<Configuration> sol = (ArrayList<Configuration>) Solver.BFS(currentConfig);
@@ -40,16 +53,29 @@ public class JamModel {
             alertObservers("Hint");
         }
     }
+
+    /**
+     * Gets the current config
+     * @return currentConfig
+     */
     public JamConfig getBoard()
     {
         return currentConfig;
     }
 
+    /**
+     * Gets the filename
+     * @return filename/loadedGame
+     */
     public String getFilename()
     {
         return loadedGame;
     }
 
+    /**
+     * Initially Loads the file based on the String form and assigns the configs
+     * @param file the file
+     */
     public void loadFile(String file)
     {
         try
@@ -84,7 +110,10 @@ public class JamModel {
         }
     }
 
-
+    /**
+     * Handles creation of the new config whenever a move is made
+     * @param dir represents the direction that the user is trying to move
+     */
     public void move(String dir)
     {
         if(currentConfig.isSolution()) { alertObservers("Won"); return; }
@@ -105,6 +134,10 @@ public class JamModel {
 
     }
 
+    /**
+     * Represents when the user selects a cell to move
+     * @param commands contains the information on what cell was selected
+     */
     public void select(String[] commands)
     {
         if (selected)
@@ -144,6 +177,10 @@ public class JamModel {
                 alertObservers("NoCar");
         }
     }
+
+    /**
+     * Resets the current config to original config
+     */
     public void reset() {
         currentConfig = initialConfig;
         alertObservers("Reset");
