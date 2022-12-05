@@ -111,7 +111,7 @@ public class JamModel {
     }
 
     /**
-     * Handles creation of the new config whenever a move is made
+     * Handles Creation of the new config whenever a move is made
      * @param dir represents the direction that the user is trying to move
      */
     public void move(String dir)
