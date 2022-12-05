@@ -89,8 +89,6 @@ public class JamModel {
     {
         if(currentConfig.isSolution()) { alertObservers("Won"); return; }
         Car car = currentConfig.getCar(currentCar);
-        for (int i = 0; i < currentConfig.getCars().size(); i++)
-            System.out.println(currentConfig.getCars().get(i).getLetter());
         int i = currentConfig.getCars().indexOf(car);
         int startR = car.getStartRow();
         int endR = car.getEndRow();
@@ -114,17 +112,18 @@ public class JamModel {
             this.commands = commands;
             int moveH = Integer.parseInt(commands[2]) - Integer.parseInt(prevSelect[2]); //swapped numbers
             int moveV = Integer.parseInt(commands[1]) - Integer.parseInt(prevSelect[1]);
+            String orient = currentConfig.getCar(currentCar).getDirection();
             if ((currentConfig.collision(Integer.parseInt(commands[2]), Integer.parseInt(commands[1]))))
             {
-                if (moveH != 0 && moveV == 0)
+                if (moveH != 0 && moveV == 0 && orient.equals("H"))
                 {
                     if (moveH > 0 && (!(Integer.parseInt(commands[2]) >= currentConfig.getWidth()))) move("R");
                     else if ((!(Integer.parseInt(commands[2]) < 0))) move("L");
                 }
-                else if (moveH == 0 && moveV != 0)
+                else if (moveH == 0 && moveV != 0 && orient.equals("V"))
                 {
-                    if (moveV > 0 && (!(Integer.parseInt(commands[1]) >= currentConfig.getHeight()))) move("D");
-                    else if ((!(Integer.parseInt(commands[1]) < 0))) move("U");
+                    if (moveV > 0 && (!(Integer.parseInt(commands[1]) >= currentConfig.getHeight()))) move("U");
+                    else if ((!(Integer.parseInt(commands[1]) < 0))) move("D");
                 }
             }
             else
