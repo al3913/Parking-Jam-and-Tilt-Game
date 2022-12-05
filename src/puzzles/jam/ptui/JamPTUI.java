@@ -29,13 +29,14 @@ public class JamPTUI implements Observer<JamModel, String> {
 
     @Override
     public void update(JamModel model, String msg) {
-        if(model.getBoard().isSolution()) {
+        /*if(model.getBoard().isSolution()) {
             System.out.println("Already Won!");
             displayBoard();
             return;
-        }
+        }*/
         switch (msg) {
-            case "Loaded" -> System.out.println("> Loaded: " + model.getFilename());
+            case "Won" -> System.out.println("Already Won!");
+            case "Loaded" -> System.out.println("> Loaded: " + model.getFilename().substring(9));
             case "LoadFailed" -> System.out.println("> Failed to load: " + model.getFilename());
             case "NoHint" -> System.out.println("Current Board is unsolvable. Please restart.");
             case "Hint" -> System.out.println("> Next step!");
@@ -53,7 +54,7 @@ public class JamPTUI implements Observer<JamModel, String> {
 
     public void run()
     {
-        System.out.println("Loaded: " + model.getFilename());
+        System.out.println("Loaded: " + model.getFilename().substring(9));
         displayBoard();
         System.out.println(COMMANDS);
         boolean b = true;
@@ -109,7 +110,6 @@ public class JamPTUI implements Observer<JamModel, String> {
                 System.out.print(board[row][col] + " ");
             System.out.println();
         }
-        System.out.println();
 
     }
 
