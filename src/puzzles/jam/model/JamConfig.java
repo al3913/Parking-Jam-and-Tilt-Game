@@ -50,7 +50,7 @@ public class JamConfig implements Configuration {
             }
         }
     }
-
+    //
     public JamConfig(int startR, int endR, int startC, int endC, JamConfig other, int index, String move)
     {
         Car newC = new Car(startR,startC,endR,endC, other.cars.get(index).getLetter());
