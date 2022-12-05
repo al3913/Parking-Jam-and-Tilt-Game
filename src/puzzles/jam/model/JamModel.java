@@ -174,6 +174,7 @@ public class JamModel {
                 currentCar = String.valueOf(currentConfig.getGrid()[Integer.parseInt(commands[1])][Integer.parseInt(commands[2])]);
             }
             else
+                prevSelect = commands;
                 alertObservers("NoCar");
         }
     }
