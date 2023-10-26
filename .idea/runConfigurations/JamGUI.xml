@@ -5,7 +5,7 @@
     <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
     <option name="MAIN_CLASS_NAME" value="puzzles.jam.gui.JamGUI" />
     <module name="BFSPuzzleSolver2" />
-    <option name="PROGRAM_PARAMETERS" value="data/jam/jam-6.txt" />
+    <option name="PROGRAM_PARAMETERS" value="data/jam/jam-11.txt" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="puzzles.jam.gui.*" />
